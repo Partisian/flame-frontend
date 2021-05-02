@@ -50,15 +50,30 @@
         ></v-img>
       </template>
 
+      <v-col
+          cols="12"
+          sm="1"
+      >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+      </v-col>
+      <v-divider
+      class="mx-4"
+      vertical
+    ></v-divider>
+      <v-col
+          cols="12"
+          sm="10"
+      >
       <v-app-bar-title>Flame</v-app-bar-title>
-
-      <v-spacer></v-spacer>
-
+      </v-col>
+      <v-col
+          cols="12"
+          sm="1"
+      >
       <v-btn icon @click.prevent="logOut">
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
+      </v-col>
     </v-app-bar>
 
     <v-main>
