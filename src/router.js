@@ -28,33 +28,49 @@ export const router = new Router({
     },
     {
       path: '/profile',
-      name: 'profile',
+      name: 'Profile',
       // lazy-loaded
       component: () => import('./views/Profile.vue')
     },
     {
       path: '/admin',
-      name: 'admin',
+      name: 'Admin',
       // lazy-loaded
       component: () => import('./views/BoardAdmin.vue')
     },
     {
       path: '/mod',
-      name: 'moderator',
+      name: 'Moderator',
       // lazy-loaded
       component: () => import('./views/BoardModerator.vue')
     },
     {
       path: '/user',
-      name: 'user',
+      name: 'User',
       // lazy-loaded
       component: () => import('./views/BoardUser.vue')
     },
     {
       path: '/campaigns',
-      name: 'campaigns',
+      name: 'Campaigns',
       // lazy-loaded
       component: () => import('./views/Campaigns.vue')
+    },
+    {
+      path: '/createcampaign',
+      name: 'Create Campaign',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/CreateCampaign.vue')
+    },
+    {
+      path: '/about',
+      name: 'About',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/About.vue')
     }
   ]
 });

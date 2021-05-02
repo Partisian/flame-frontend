@@ -1,64 +1,89 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+  <v-app id="inspire">
+    <v-navigation-drawer 
+    v-model="drawer"
+    app
+    >
+    
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="../src/assets/FlameLogo.png"></v-img>
+        </v-list-item-avatar>
 
-      <a href class="navbar-brand" @click.prevent>bezKoder</a>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link">
-            <font-awesome-icon icon="home" />Home
-          </router-link>
-        </li>
-        <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/admin" class="nav-link">Admin Board</router-link>
-        </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
-        </li>
-      </div>
+        <v-list-item-title>Flame</v-list-item-title>
+      </v-list-item>
 
-      <div v-if="!currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" />Sign Up
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/login" class="nav-link">
-            <font-awesome-icon icon="sign-in-alt" />Login
-          </router-link>
-        </li>
-      </div>
+      <v-divider></v-divider>
 
-      <div v-if="currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/profile" class="nav-link">
-            <font-awesome-icon icon="user" />
-            {{ currentUser.username }}
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href @click.prevent="logOut">
-            <font-awesome-icon icon="sign-out-alt" />LogOut
-          </a>
-        </li>
-      </div>
+      <v-list
+        dense
+        nav
+      >
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          :to="item.to"
+          link
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
 
- 
-    </nav>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-    <div class="container">
-      <router-view />
-    </div>
-  </div>
+    <v-app-bar
+      app
+      color="primary"
+      dense
+      dark
+      src="../src/assets/city.jpg"
+      prominent
+    >
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+        ></v-img>
+      </template>
+
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-app-bar-title>Flame</v-app-bar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon @click.prevent="logOut">
+        <v-icon>mdi-logout-variant</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+  </v-app>
 </template>
+
 
 <script>
 
 export default {
+      data: () => ({ 
+      drawer: null,
+      items: [
+          { title: 'Home', icon: 'mdi-home-circle-outline', to:'/' },
+          { title: 'Board Admin', icon: 'mdi-head-minus-outline', to:'/admin' },
+          { title: 'Board Moderator', icon: 'mdi-account-eye-outline', to:'/mod' },
+          { title: 'Board User', icon: 'mdi-account-group-outline', to:'/user' },
+          { title: 'Profile', icon: 'mdi-account-details', to:'/profile' },
+          { title: 'Campaigns', icon: 'mdi-account-details', to:'/campaigns' },
+          { title: 'Create Campaign', icon: 'mdi-briefcase-plus-outline', to:'/createcampaign' },
+          { title: 'About Us', icon: 'mdi-information', to:'/about' },
+        ]
+      }),
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
