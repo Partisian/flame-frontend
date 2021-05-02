@@ -1,3 +1,4 @@
+/* eslint-disable vue/require-v-for-key */
 <template>
   <div class="col-md-12">
     <div class="card card-container">
@@ -37,6 +38,34 @@
             >{{errors.first('email')}}</div>
           </div>
           <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input
+              v-model="user.firstname"
+              v-validate="'required|min:3|max:50'"
+              type="firstname"
+              class="form-control"
+              name="firstname"
+            />
+            <div
+              v-if="submitted && errors.has('firstname')"
+              class="alert-danger"
+            >{{errors.first('firstname')}}</div>
+          </div>
+          <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input
+              v-model="user.lastname"
+              v-validate="'required|min:3|max:50'"
+              type="lastname"
+              class="form-control"
+              name="lastname"
+            />
+            <div
+              v-if="submitted && errors.has('firstname')"
+              class="alert-danger"
+            >{{errors.first('firstname')}}</div>
+          </div>
+          <div class="form-group">
             <label for="password">Password</label>
             <input
               v-model="user.password"
@@ -49,6 +78,16 @@
               v-if="submitted && errors.has('password')"
               class="alert-danger"
             >{{errors.first('password')}}</div>
+          </div>
+          <div class="form-group">
+            <label for="role">Account Type</label>
+            <select v-model="user.role">
+              <option v-for="role in roles" :key="role">{{ role }}</option>
+            </select>
+            <div
+              v-if="submitted && errors.has('role')"
+              class="alert-danger"
+            >{{errors.first('role')}}</div>
           </div>
           <div class="form-group">
             <button class="btn btn-primary btn-block">Sign Up</button>
@@ -72,10 +111,12 @@ export default {
   name: 'Register',
   data() {
     return {
-      user: new User('', '', ''),
+      user: new User('', '', '', ''),
       submitted: false,
       successful: false,
-      message: ''
+      message: '',
+      roles: ['Brand', 'Influencer']
+
     };
   },
   computed: {

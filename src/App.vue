@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand navbar-dark bg-dark">
+
       <a href class="navbar-brand" @click.prevent>bezKoder</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -45,6 +46,8 @@
           </a>
         </li>
       </div>
+
+ 
     </nav>
 
     <div class="container">
@@ -54,6 +57,7 @@
 </template>
 
 <script>
+
 export default {
   computed: {
     currentUser() {
