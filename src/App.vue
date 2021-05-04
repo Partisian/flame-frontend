@@ -57,7 +57,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </v-col>
       <v-divider
-      class="mx-4"
+      class="mx-2"
       vertical
     ></v-divider>
       <v-col
@@ -91,7 +91,7 @@ export default {
       items: [
           { title: 'Home', icon: 'mdi-home-circle-outline', to:'/' },
           { title: 'Board Admin', icon: 'mdi-head-minus-outline', to:'/admin' },
-          { title: 'Board Moderator', icon: 'mdi-account-eye-outline', to:'/mod' },
+          { title: 'Board Moderator', icon: 'mdi-head-cog-outline', to:'/mod' },
           { title: 'Board User', icon: 'mdi-account-group-outline', to:'/user' },
           { title: 'Profile', icon: 'mdi-account-details', to:'/profile' },
           { title: 'Campaigns', icon: 'mdi-account-details', to:'/campaigns' },
