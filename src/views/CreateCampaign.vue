@@ -10,8 +10,20 @@
   </v-col>
 </v-row>
 </div>
+<transition name="fade" mode="out-in">
+  <div v-if="createCampaignClicked" class="alert alert-success" role="alert" >
+   <v-alert
+      dense
+      text
+      type="success"
+      display=false
+    >
+      The campaign <strong>{{campaignTitle}}</strong> has been created <strong>successfully</strong>
+    </v-alert>
+  </div>
+  </transition>
   <div class="form-group">
-   <v-form>
+   <v-form >
     <v-container>
       <v-row>
         <v-col
@@ -19,7 +31,7 @@
           sm="6"
         >
           <v-text-field
-            v-model="campaignname"
+            v-model="campaignTitle"
             label="Campaign Name"
             clearable
           ></v-text-field>
@@ -38,8 +50,8 @@
       md="4"
     >
       <v-menu
-        ref="menu"
-        v-model="menu"
+        ref="datefrommenu"
+        v-model="datefrommenu"
         :close-on-content-click="false"
         :return-value.sync="date"
         transition="scale-transition"
@@ -57,7 +69,7 @@
           ></v-text-field>
         </template>
         <v-date-picker
-          v-model="date"
+          v-model="datefrom"
           no-title
           scrollable
         >
@@ -65,14 +77,14 @@
           <v-btn
             text
             color="primary"
-            @click="menu = false"
+            @click="datefrommenu = false"
           >
             Cancel
           </v-btn>
           <v-btn
             text
             color="primary"
-            @click="$refs.menu.save(date)"
+            @click="$refs.datefrommenu.save(datefrom)"
           >
             OK
           </v-btn>
@@ -85,8 +97,8 @@
       md="4"
     >
       <v-menu
-        ref="menu"
-        v-model="menu"
+        ref="datetomenu"
+        v-model="datetomenu"
         :close-on-content-click="false"
         :return-value.sync="date"
         transition="scale-transition"
@@ -104,7 +116,7 @@
           ></v-text-field>
         </template>
         <v-date-picker
-          v-model="date"
+          v-model="dateto"
           no-title
           scrollable
         >
@@ -112,14 +124,14 @@
           <v-btn
             text
             color="primary"
-            @click="menu = false"
+            @click="datetomenu = false"
           >
             Cancel
           </v-btn>
           <v-btn
             text
             color="primary"
-            @click="$refs.menu.save(date)"
+            @click="$refs.datetomenu.save(dateto)"
           >
             OK
           </v-btn>
@@ -132,7 +144,7 @@
           cols="12"
         >
           <v-text-field
-            v-model="mediadescription"
+            v-model="campaignDesc"
             label="Media Description"
             clearable
           ></v-text-field>
@@ -185,6 +197,7 @@
     <v-btn
       depressed
       color="primary"
+      @click.prevent="createCampaign()"
     >
       Create Campaign
     </v-btn>
@@ -197,22 +210,85 @@
 </template>
 
 <script>
+const baseUrl = 'http://localhost:8081/';
+import User from '../models/user';
+import axios from 'axios'
 export default{
-  name:'',
-  data(){
+  name: 'CreateCampaign',
+  data: function() {
     return{
-        campaignname: 'Nike',
-        datefrom: new Date().toISOString().substr(0, 10),
-        dateto: new Date().toISOString().substr(0, 10),
+        user: [],
+        createCampaignClicked: false,
+        date:'',
+        brandId:'',
+        datetomenu:'',
+        datefrommenu:'',
+        campaignTitle: 'Nike',
+        datefrom: '',
+        dateto: '',
+        //dateto: new Date().toISOString().substr(0, 10),
         menu: false,
-        mediadescription: 'Description of the Campaign',
+        campaignDesc: 'Description of the Campaign',
         addtnmediadesc: 'Additional description of the Campaign',
         contact: '12345678',
         category: ['Sports', 'Food', 'Fashion', 'Jewelry'],
         reward: '12345678',
     }
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
   methods:{
+    createCampaign(){
+      this.url = baseUrl + 'api/v1/campaign/';
+      const campaigndata = {
+      brandId:this.$store.state.auth.user.id,
+      campaignTitle:this.campaignTitle,
+      campaignDesc:this.campaignDesc,
+      campaignCreateDate:new Date().toISOString().substr(0, 10),
+      campaignStatus:'0'
+      };
+      axios.post(this.url,campaigndata).then(resp => {
+      console.log(`HTTP Response: ${resp.status}, ${resp.statusText}`);
+      console.log(`Response Data: ${resp.data.length} items`);
+      this.createCampaignClicked=true;
+      }).catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+       //alert('Submitted')
+      //this.$axios.post('http://18.138.248.19:8080/api/campaign',{
+      //  campaignTitle: this.campaignTitle,
+      //  brandId:'4',
+      //  campaignDesc:this.mediadescription,
+      //  campaignCreateDate:new Date().toISOString().substr(0, 10),
+      //  campaignStatus:'0'
+      //}).then((response)=>{this.console.log(response)}).catch((error)=>{this.console.log(error)})
+      
+      /*axios.post('http://18.138.248.19:8080/api/campaign', {
+        campaignTitle: this.campaignTitle,
+        brandId:'4',
+        campaignDesc:this.mediadescription,
+        campaignCreateDate:new Date().toISOString().substr(0, 10),
+        campaignStatus:'0'
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });*/
+
+    }
+  },
+  watch:{
+    createCampaignClicked(val){
+      if (val){
+        setTimeout(()=>this.createCampaignClicked=false,1000);
+      }
+    }
   }
 }
 </script>
